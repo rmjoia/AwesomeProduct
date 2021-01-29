@@ -14,7 +14,8 @@
     <input name="NumberToProcess" type="number" [(ngModel)]="numberToProcess" />
   </p>
   <p>
-    <button name="Process" *ngIf="isValid()" [disabled]="processing" (click)="process()">Process</button>
+    <button name="Process" class="button btn-primary" *ngIf="isValid()" [disabled]="processing"
+      (click)="process()">Process</button>
   </p>
 </form>
 
