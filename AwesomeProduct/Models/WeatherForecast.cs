@@ -1,6 +1,6 @@
 using System;
 
-namespace AwesomeProduct
+namespace AwesomeProduct.Models
 {
     public class WeatherForecast
     {
