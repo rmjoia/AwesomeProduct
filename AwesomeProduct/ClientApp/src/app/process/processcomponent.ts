@@ -1,6 +1,7 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { interval, Observable, of, Subject } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { interval, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { BatchJob } from '../shared/models/Batches';
 
 @Component({
   selector: 'app-process',
@@ -9,18 +10,32 @@ import { interval, Observable, of, Subject } from 'rxjs';
 })
 export class ProcessComponent implements OnDestroy {
 
+  private readonly UpdateIntervalInMilliseconds = 2000;
+
   private subscription = new Subject();
 
-  public processing: WeatherForecast[] = [];
-  public numberOfBatches: number;
-  public numberToProcess: number;
+  public processing = false;
+  public processes: BatchJob[] = [];
+  public numberOfBatches = 0;
+  public numberToProcess = 0;
+  public batchTotal = 0;
 
   process() {
-    console.log(this.numberOfBatches, this.numberToProcess);
+    this.processing = true;
 
-    interval(100)
-    .pipe(takeUntil())
-    .subscribe();
+    interval(this.UpdateIntervalInMilliseconds)
+      .pipe(
+        takeUntil(this.subscription),
+        take(5))
+      .subscribe(d => {
+        console.log(d);
+        this.processes = [{
+          numberOfBatches: Math.ceil(Math.random() * this.numberOfBatches),
+          numberToProcess: Math.ceil(Math.random() * 100 * this.numberToProcess)
+        } as BatchJob];
+        this.processes.map(b => this.batchTotal += b.numberToProcess);
+        this.processing = d !== 4;
+      });
   }
 
   isValid() {

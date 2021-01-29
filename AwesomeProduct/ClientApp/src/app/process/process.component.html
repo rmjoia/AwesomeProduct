@@ -2,7 +2,7 @@
 
 <p>Enter the data and click process to process things.</p>
 
-<p *ngIf="!processing"><em>Loading...</em></p>
+<p *ngIf="processing"><em>Loading...</em></p>
 
 <form #processForm>
   <p>
@@ -14,7 +14,7 @@
     <input name="NumberToProcess" type="number" [(ngModel)]="numberToProcess" />
   </p>
   <p>
-    <button name="Process" *ngIf="isValid()" (click)="process()">Process</button>
+    <button name="Process" *ngIf="isValid()" [disabled]="processing" (click)="process()">Process</button>
   </p>
 </form>
 
@@ -27,16 +27,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>0</td>
-      <td>0</td>
+    <tr *ngFor="let item of processes; let i = index">
+      <th scope="row">{{i}}</th>
+      <td>{{item.numberOfBatches}}</td>
+      <td>{{item.numberToProcess}}</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <th>current totals</th>
-      <td colspan="2">0</td>
+      <td colspan="2">{{batchTotal}}</td>
     </tr>
   </tfoot>
 </table>
