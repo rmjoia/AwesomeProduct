@@ -1,0 +1,42 @@
+<h1 id="tableLabel">Process Things...</h1>
+
+<p>Enter the data and click process to process things.</p>
+
+<p *ngIf="!processing"><em>Loading...</em></p>
+
+<form #processForm>
+  <p>
+    <label class="label" for="NumberOfBatches">Please enter the number of batches:</label>
+    <input name="NumberOfBatches" type="number" [(ngModel)]="numberOfBatches" />
+  </p>
+  <p>
+    <label class="label" for="NumberToProcess">Please enter how many numbers will be processed per batch:</label>
+    <input name="NumberToProcess" type="number" [(ngModel)]="numberToProcess" />
+  </p>
+  <p>
+    <button name="Process" *ngIf="isValid()" (click)="process()">Process</button>
+  </p>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"># Batches</th>
+      <th scope="col"># Batches to process</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>current totals</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>
