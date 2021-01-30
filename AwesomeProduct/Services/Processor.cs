@@ -1,10 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AwesomeProduct.Models;
+
 namespace AwesomeProduct.Services
 {
-    public class Processor
+    public class GeneratorManager : IGeneratorManager
     {
-        public Processor()
+        private Random rng = new Random(new DateTime().Millisecond);
+
+        public GeneratorManager()
         {
+        }
+
+        public event IGeneratorManager.NumberGeneratedEventHandler NumberGenerated;
+
+        public void Generate(int batchNumber, int numbersToGenerate)
+        {
+
+            Enumerable.Range(0, numbersToGenerate).ToList().ForEach(async _ =>
+           {
+               await Task.Delay(5000);
+               NumberGenerated?.Invoke(new BatchJob(batchNumber, rng.Next(1, 100)));
+           });
+        }
+
+        public BatchJob Multiply(BatchJob batchJob)
+        {
+            return new BatchJob(0, 0);
         }
     }
 }

@@ -10,17 +10,17 @@ namespace OtherApi.Tests
         [SetUp]
         public void Setup()
         {
-            Mock<ILogger<WeatherForecastController>> logger = new Mock<ILogger<WeatherForecastController>>();
-            var weatherForecast = new WeatherForecastController(logger.Object);
-
-            Assert.NotNull(weatherForecast);
+            
             
         }
 
         [Test]
         public void Test1()
         {
-            Assert.Pass();
+            Mock<ILogger<WeatherForecastController>> logger = new Mock<ILogger<WeatherForecastController>>();
+            var weatherForecast = new WeatherForecastController(logger.Object);
+
+            Assert.NotNull(weatherForecast);
         }
     }
 }

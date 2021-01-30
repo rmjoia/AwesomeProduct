@@ -1,6 +1,6 @@
+using AwesomeProduct.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,10 +21,13 @@ namespace AwesomeProduct
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IBatchProcessor, BatchProcessor>();
+            services.AddTransient<IGeneratorManager, GeneratorManager>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OtherApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AwesomeAPI", Version = "v1" });
             });
 
             services.AddSpaStaticFiles(configuration =>

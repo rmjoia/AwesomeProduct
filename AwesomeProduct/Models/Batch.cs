@@ -1,15 +1,9 @@
-using System;
-
 namespace AwesomeProduct.Models
 {
-    public class WeatherForecast
+    public class Batch
     {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public string Summary { get; set; }
+        public int CurrentBatch { get; set; }
+        public int NumbersProcessed { get; set; }
+        public long Result { get; set; }
     }
 }

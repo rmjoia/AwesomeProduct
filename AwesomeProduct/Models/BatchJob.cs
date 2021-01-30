@@ -1,10 +1,13 @@
-﻿using System;
-namespace AwesomeProduct.Models
+﻿namespace AwesomeProduct.Models
 {
-    public class EmptyClass
+    public class BatchJob
     {
-        public EmptyClass()
+        public BatchJob(int batchNumber, int number)
         {
+            Batch = batchNumber;
+            Number = number;
         }
+        public int Batch { get; init; }
+        public int Number { get; init; }
     }
 }
