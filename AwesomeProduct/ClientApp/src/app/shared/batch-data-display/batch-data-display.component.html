@@ -1,16 +1,16 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col"># Batches</th>
-      <th scope="col"># Batches to process</th>
+      <th scope="col"># left to process</th>
+      <th scope="col">Batch total sum</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let item of batches; let i = index">
       <th scope="row">{{i}}</th>
-      <td>{{item.currentBatch}} / {{numberOfBatches}}</td>
-      <td>{{item.processedNumbers}} / {{numberToProcess}}</td>
+      <td>{{item.leftToProcess}} / {{numberToProcess}}</td>
+      <td>{{item.result}}</td>
     </tr>
   </tbody>
   <tfoot>

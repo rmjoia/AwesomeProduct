@@ -14,9 +14,10 @@
     <input name="NumberToProcess" type="number" [(ngModel)]="numberToProcess" />
   </p>
   <p>
-    <button name="Process" class="button btn-primary" *ngIf="isValid()" [disabled]="processing"
+    <button name="Process" class="button btn-primary" *ngIf="isValid()" [disabled]="data.isComplete"
       (click)="process()">Process</button>
   </p>
 </form>
 
-<app-batch-data-display [batches]="processes" [numberOfBatches]="numberOfBatches" [numberToProcess]="numberToProcess" ></app-batch-data-display>
+<app-batch-data-display [batches]="data.BatchJobs" [numberOfBatches]="numberOfBatches"
+  [numberToProcess]="numberToProcess"></app-batch-data-display>

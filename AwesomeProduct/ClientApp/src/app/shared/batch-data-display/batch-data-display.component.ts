@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { groupBy } from 'rxjs/operators';
-import { BatchJob } from '../models/Batches';
+import { BatchJobResult } from '../models/BatchJobResult';
 
 @Component({
   selector: 'app-batch-data-display',
@@ -9,7 +9,7 @@ import { BatchJob } from '../models/Batches';
 })
 export class BatchDataDisplayComponent {
 
-  @Input() batches: BatchJob[] = [];
+  @Input() batches: BatchJobResult[] = [];
   @Input() numberOfBatches = 0;
   @Input() numberToProcess = 0;
 

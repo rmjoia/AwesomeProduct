@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BatchJob } from '../shared/models/Batches';
+import { BatchJobResult } from '../shared/models/BatchJobResult';
+import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
 
 @Component({
   selector: 'app-batch-process-history',
@@ -8,7 +9,7 @@ import { BatchJob } from '../shared/models/Batches';
 })
 export class BatchProcessHistoryComponent implements OnInit {
 
-  processes: BatchJob[] = [];
+  processes: BatchProcessingResponse[] = [];
   numberOfBatches = 0;
   numberToProcess = 0;
 
@@ -20,10 +21,11 @@ export class BatchProcessHistoryComponent implements OnInit {
     this.numberToProcess = 1;
     this.processes = [
       {
-        currentBatch: 1,
-        processedNumbers: 1,
-        result: 500
-      } as BatchJob
+        BatchJobs: [
+          { batchNumber: 1, result: 500, leftToProcess: 0 } as BatchJobResult
+        ],
+        isComplete: true
+      } as BatchProcessingResponse
     ];
 
   }

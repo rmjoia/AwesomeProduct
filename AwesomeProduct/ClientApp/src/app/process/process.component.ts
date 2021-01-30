@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { interval, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { BatchJob } from '../shared/models/Batches';
+import { BatchJobResult } from '../shared/models/BatchJobResult';
+import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
 
 @Component({
   selector: 'app-process',
@@ -10,17 +11,17 @@ import { BatchJob } from '../shared/models/Batches';
 })
 export class ProcessComponent implements OnDestroy {
 
+  private readonly initialState = { BatchJobs: [], isComplete: false } as BatchProcessingResponse;
   private readonly secondsInMilliseconds = 1000;
-
   private subscription = new Subject();
 
   public processing = false;
-  public processes: BatchJob[] = [];
+  public data: BatchProcessingResponse = this.initialState;
   public numberOfBatches = 0;
   public numberToProcess = 0;
 
   process() {
-    this.processes = [];
+    this.data = this.initialState;
     this.processing = true;
 
     interval(this.secondsInMilliseconds * this.numberOfBatches)
@@ -29,12 +30,17 @@ export class ProcessComponent implements OnDestroy {
         take(this.numberToProcess))
       .subscribe(d => {
         console.log(d);
-        this.processes = [...this.processes, {
-          currentBatch: d + 1,
-          processedNumbers: this.numberToProcess,
-          result: Math.ceil(Math.random() * 100 * this.numberToProcess)
-        } as BatchJob];
-        this.processing = d !== (this.numberToProcess - 1);
+        this.data = {
+          ...this.data,
+          BatchJobs: [
+            {
+              batchNumber: d + 1,
+              leftToProcess: 0,
+              result: Math.ceil(Math.random() * 100 * this.numberToProcess)
+            } as BatchJobResult,
+          ],
+          isComplete: d !== (this.numberToProcess - 1)
+        } as BatchProcessingResponse;
       });
   }
 
