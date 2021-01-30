@@ -21,8 +21,8 @@ export class BatchProcessHistoryComponent implements OnInit {
     this.numberToProcess = 1;
     this.processes = [
       {
-        BatchJobs: [
-          { batchNumber: 1, result: 500, leftToProcess: 0 } as BatchJobResult
+        data: [
+          { batchNumber: 1, number: 500, leftToProcess: 0 } as BatchJobResult
         ],
         isComplete: true
       } as BatchProcessingResponse

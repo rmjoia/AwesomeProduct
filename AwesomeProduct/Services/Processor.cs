@@ -22,13 +22,13 @@ namespace AwesomeProduct.Services
             Enumerable.Range(0, numbersToGenerate).ToList().ForEach(async _ =>
            {
                await Task.Delay(5000);
-               NumberGenerated?.Invoke(new BatchJob(batchNumber, rng.Next(1, 100)));
+               NumberGenerated?.Invoke(new BatchJob(batchNumber, rng.Next(1, 100), numbersToGenerate));
            });
         }
 
         public BatchJob Multiply(BatchJob batchJob)
         {
-            return new BatchJob(0, 0);
+            return new BatchJob(batchJob.BatchNumber, batchJob.Number * 2, batchJob.LeftToProcess);
         }
     }
 }

@@ -1,6 +1,6 @@
 import { BatchJobResult } from './BatchJobResult';
 
 export interface BatchProcessingResponse {
-  BatchJobs: BatchJobResult[];
+  data: BatchJobResult[];
   isComplete: boolean;
 }

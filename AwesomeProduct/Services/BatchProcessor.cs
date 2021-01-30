@@ -10,7 +10,6 @@ namespace AwesomeProduct.Services
     {
         private IGeneratorManager _processor;
         private ConcurrentBag<BatchJob> _currentBatchProcess;
-        private bool _processingStatus;
         public BatchProcessor(IGeneratorManager processor)
         {
             _processor = processor;
@@ -22,18 +21,20 @@ namespace AwesomeProduct.Services
         private void ReseBatchJobs()
         {
             _currentBatchProcess = new ConcurrentBag<BatchJob>();
-            _processingStatus = false;
         }
 
         public BatchProcessResponse getStatus()
         {
             var currentBatchProcess = new List<BatchJob>(_currentBatchProcess.ToArray());
-            var groupedBatchJobs = currentBatchProcess.GroupBy(b => b.Batch).Select(g => new BatchJob(g.First().Batch, g.Sum(b => b.Number))).ToList();
-            return new BatchProcessResponse()
+            var groupedBatchJobs = currentBatchProcess.GroupBy(b => b.BatchNumber).Select(g => new BatchJob(g.First().BatchNumber, g.Sum(b => b.Number), g.First().LeftToProcess - g.Count())).ToList();
+
+            var result = new BatchProcessResponse()
             {
                 Data = groupedBatchJobs,
-                IsComplete = _processingStatus
+                IsComplete = groupedBatchJobs.Any() && groupedBatchJobs.All(b => b.LeftToProcess == 0)
             };
+
+            return result;
         }
 
         public BatchProcessResponse Process(int numberOrBatches, int numbersToProcess)
@@ -45,8 +46,6 @@ namespace AwesomeProduct.Services
                   var currentBatch = i + 1;
                   _processor.Generate(currentBatch, numbersToProcess);
               });
-
-            _processingStatus = process.IsCompleted;
 
             return new BatchProcessResponse()
             {

@@ -26,7 +26,7 @@ import { BatchProcessHistoryComponent } from './batch-process-history/batch-proc
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'process', component: ProcessComponent },
+      { path: 'batch-process', component: ProcessComponent },
       { path: 'history', component: BatchProcessHistoryComponent },
     ], { relativeLinkResolution: 'legacy' })
   ],

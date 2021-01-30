@@ -17,7 +17,7 @@ export class BatchDataDisplayComponent {
 
     let total = 0;
 
-    this.batches.map(b => total += b.result);
+    this.batches.map(b => total += b.number);
 
     return total;
   }

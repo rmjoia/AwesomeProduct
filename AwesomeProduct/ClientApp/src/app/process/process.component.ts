@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
-import { interval, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { BatchJobResult } from '../shared/models/BatchJobResult';
+import { EMPTY, interval, Observable, Subject } from 'rxjs';
+import { catchError, take, takeUntil } from 'rxjs/operators';
+import { BatchProcessingRequest } from '../shared/models/BatchProcessingRequest';
 import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
+import { ProcessService } from './process.service';
 
 @Component({
   selector: 'app-process',
@@ -11,36 +12,51 @@ import { BatchProcessingResponse } from '../shared/models/BatchProcessingRespons
 })
 export class ProcessComponent implements OnDestroy {
 
-  private readonly initialState = { BatchJobs: [], isComplete: false } as BatchProcessingResponse;
+  private readonly initialState = { data: [], isComplete: false } as BatchProcessingResponse;
   private readonly secondsInMilliseconds = 1000;
   private subscription = new Subject();
 
   public processing = false;
-  public data: BatchProcessingResponse = this.initialState;
+  public response: BatchProcessingResponse = this.initialState;
   public numberOfBatches = 0;
   public numberToProcess = 0;
 
-  process() {
-    this.data = this.initialState;
-    this.processing = true;
+  constructor(private processService: ProcessService) {
 
-    interval(this.secondsInMilliseconds * this.numberOfBatches)
-      .pipe(
-        takeUntil(this.subscription),
-        take(this.numberToProcess))
-      .subscribe(d => {
-        console.log(d);
-        this.data = {
-          ...this.data,
-          BatchJobs: [
-            {
-              batchNumber: d + 1,
-              leftToProcess: 0,
-              result: Math.ceil(Math.random() * 100 * this.numberToProcess)
-            } as BatchJobResult,
-          ],
-          isComplete: d !== (this.numberToProcess - 1)
-        } as BatchProcessingResponse;
+  }
+
+  process() {
+    this.response = this.initialState;
+    this.processing = true;
+    this.subscription = new Subject();
+
+    this.processService.processBatch(
+      {
+        numberOfBatches: this.numberOfBatches,
+        numberToProcess: this.numberToProcess
+      } as BatchProcessingRequest
+    ).pipe(
+      take(1),
+      catchError(this.handleError)
+    ).subscribe(_ => {
+      this.processing = true;
+    });
+
+    interval(this.secondsInMilliseconds * 2)
+      .pipe(takeUntil(this.subscription))
+      .subscribe(_ => {
+        this.processService.getStatus().subscribe(response => {
+
+          this.response = { ...response };
+
+          console.log(this.response);
+
+          if (this.response.isComplete) {
+            this.subscription.next();
+            this.subscription.complete();
+            this.processing = false;
+          }
+        });
       });
   }
 
@@ -48,6 +64,12 @@ export class ProcessComponent implements OnDestroy {
     return this.numberOfBatches &&
       this.numberToProcess;
   }
+
+  handleError(error: Observable<any>) {
+    console.error(error);
+    return EMPTY;
+  }
+
   ngOnDestroy(): void {
     this.subscription.next();
     this.subscription.complete();
