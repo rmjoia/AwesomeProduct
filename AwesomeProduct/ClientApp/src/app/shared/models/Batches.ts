@@ -1,4 +1,5 @@
 export interface BatchJob {
-  numberOfBatches: number;
-  numberToProcess: number;
+  currentBatch: number;
+  processedNumbers: number;
+  result: number;
 }

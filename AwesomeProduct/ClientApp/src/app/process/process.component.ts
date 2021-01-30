@@ -10,7 +10,7 @@ import { BatchJob } from '../shared/models/Batches';
 })
 export class ProcessComponent implements OnDestroy {
 
-  private readonly UpdateIntervalInMilliseconds = 2000;
+  private readonly secondsInMilliseconds = 1000;
 
   private subscription = new Subject();
 
@@ -18,23 +18,23 @@ export class ProcessComponent implements OnDestroy {
   public processes: BatchJob[] = [];
   public numberOfBatches = 0;
   public numberToProcess = 0;
-  public batchTotal = 0;
 
   process() {
+    this.processes = [];
     this.processing = true;
 
-    interval(this.UpdateIntervalInMilliseconds)
+    interval(this.secondsInMilliseconds * this.numberOfBatches)
       .pipe(
         takeUntil(this.subscription),
-        take(5))
+        take(this.numberToProcess))
       .subscribe(d => {
         console.log(d);
-        this.processes = [{
-          numberOfBatches: Math.ceil(Math.random() * this.numberOfBatches),
-          numberToProcess: Math.ceil(Math.random() * 100 * this.numberToProcess)
+        this.processes = [...this.processes, {
+          currentBatch: d + 1,
+          processedNumbers: this.numberToProcess,
+          result: Math.ceil(Math.random() * 100 * this.numberToProcess)
         } as BatchJob];
-        this.processes.map(b => this.batchTotal += b.numberToProcess);
-        this.processing = d !== 4;
+        this.processing = d !== (this.numberToProcess - 1);
       });
   }
 

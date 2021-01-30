@@ -1,27 +1,33 @@
-# AwesomeProduct
+# Awesome Product
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
+This is an awesome product to use, it processes things!
+##  
+## Running the Awesome Product
 
-## Development server
+To run, just start the project on Visual Studio, the UI should be launched and the two APIs should start listening to awesome requests.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+# Testing
 
-## Code scaffolding
+Both Unit and End-to-End tests can be run on the angular UI by using:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+`npm run test` - Unit Tests
+`npm run e2e` - End-To-End
 
-## Build
+The Unit Test run generates a code coverage report that will be accessible in the Coverage folder of the Angular Project folder.
+The Terminal Run will also display the desired coverage thresholds
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## To help other developers, when running in develop mode each API will expose a swagger endpoint
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Security
 
-## Running end-to-end tests
+Great amounts of effort were put into the security of this Awesome Product!
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+to know what's the current state run `npm audit`
+At the time of writing, all possible fixes were applied "**automagically**" by running `npm audit fix`
 
-## Further help
+# Design decisions and assumptions
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+I thought about making the history view a feature module and lazy load it, but due to the simplicity of the app I didn't implement it.
+
+I extracted the data display from the processing view to be able to reutilize it on the history view.
