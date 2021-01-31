@@ -14,7 +14,7 @@ export class BatchProcessHistoryComponent implements OnInit {
   private readonly initialState = {
     data: [],
     isComplete: false,
-    DateCompleted: undefined
+    dateCompleted: undefined
   } as BatchProcessingResponse;
 
   processes$: Observable<BatchProcessingResponse> = of(this.initialState);

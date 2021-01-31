@@ -16,7 +16,7 @@ export class ProcessComponent implements OnDestroy {
   private readonly initialState = {
     data: [],
     isComplete: false,
-    DateCompleted: undefined
+    dateCompleted: undefined
   } as BatchProcessingResponse;
   private readonly secondsInMilliseconds = 1000;
   private subscription = new Subject();
