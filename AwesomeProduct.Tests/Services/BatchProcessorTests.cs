@@ -37,20 +37,21 @@ namespace AwesomeProduct.Tests.Services
         {
             //  Arrange
             var batchProcessor = new BatchProcessor(processorMock.Object);
-            processorMock.Setup(p => p.Multiply(It.IsAny<BatchJob>())).Returns(new BatchJob(1, 2));
+            processorMock.Setup(p => p.Multiply(It.IsAny<BatchJob>())).Returns(new BatchJob(1, 1, 1));
             processorMock.Setup(p => p.Generate(It.IsAny<int>(), It.IsAny<int>()))
             .Callback(() =>
             {
-                processorMock.Raise(p => p.NumberGenerated += null, new BatchJob(1, 2));
+                processorMock.Raise(p => p.NumberGenerated += null, new BatchJob(1, 1, 1));
             });
 
             var expectedResult = new List<BatchJob>()
             {
-                new BatchJob(1,2)
+                new BatchJob(1,1, 1)
             };
 
             //  Act
-            var result = batchProcessor.Process(1, 1);
+            batchProcessor.Process(1, 1);
+            var result = batchProcessor.getStatus();
 
             //  Assert
             Assert.That(result.Data.Select(d => new { d.BatchNumber, d.Number }), Is.EquivalentTo(expectedResult.Select(d => new { d.BatchNumber, d.Number })));
@@ -58,7 +59,6 @@ namespace AwesomeProduct.Tests.Services
         }
 
         [Test]
-        [Ignore("This test started to fail when running in combination with others")]
         public void Should_Return_Result_And_Status_Incompleted_When_Still_Processing()
         {
             //  Arrange
@@ -66,7 +66,7 @@ namespace AwesomeProduct.Tests.Services
             processorMock.Setup(p => p.Generate(It.IsAny<int>(), It.IsAny<int>())).Callback(async () => await Task.Delay(500));
 
             //  Act
-            Task.Run(() => batchProcessor.Process(1, 1));
+            batchProcessor.Process(1, 1);
             var result = batchProcessor.getStatus();
 
             //  Assert

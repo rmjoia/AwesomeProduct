@@ -8,7 +8,8 @@ namespace AwesomeProduct.Services
 {
     public class GeneratorManager : IGeneratorManager
     {
-        private Random rng = new Random(new DateTime().Millisecond);
+        private Random randomGenerator = new Random(new DateTime().Millisecond);
+        const int secondsInMilliseconds = 1000;
 
         public GeneratorManager()
         {
@@ -18,17 +19,26 @@ namespace AwesomeProduct.Services
 
         public void Generate(int batchNumber, int numbersToGenerate)
         {
-
             Enumerable.Range(0, numbersToGenerate).ToList().ForEach(async _ =>
-           {
-               await Task.Delay(5000);
-               NumberGenerated?.Invoke(new BatchJob(batchNumber, rng.Next(1, 100), numbersToGenerate));
-           });
+            {
+                await Task.Delay(getRandomNumber(1, 5) * secondsInMilliseconds);
+                NumberGenerated?.Invoke(new BatchJob(batchNumber, randomGenerator.Next(1, 100), numbersToGenerate));
+            });
         }
 
         public BatchJob Multiply(BatchJob batchJob)
         {
-            return new BatchJob(batchJob.BatchNumber, batchJob.Number * 2, batchJob.LeftToProcess);
+            var randomMultiplier = getRandomNumber(2, 4);
+            var randomDelayInMiliseconds = getRandomNumber(1, 5) * secondsInMilliseconds;
+
+            Task.Delay(randomDelayInMiliseconds).Wait();
+
+            return new BatchJob(batchJob.BatchNumber, batchJob.Number * randomMultiplier, batchJob.LeftToProcess);
+        }
+
+        private int getRandomNumber(int startValue, int endValue)
+        {
+            return randomGenerator.Next(startValue, endValue);
         }
     }
 }

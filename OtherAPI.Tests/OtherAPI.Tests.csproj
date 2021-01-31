@@ -16,4 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\OtherApi\OtherApi.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

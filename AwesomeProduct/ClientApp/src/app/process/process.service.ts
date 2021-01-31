@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import { BatchProcessingRequest } from '../shared/models/BatchProcessingRequest';
 import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
 
@@ -10,14 +10,16 @@ import { BatchProcessingResponse } from '../shared/models/BatchProcessingRespons
 export class ProcessService {
   constructor(private http: HttpClient) { }
 
+  private readonly baseUrl = environment.processUrl;
+
   processBatch(processBatchRequest: BatchProcessingRequest) {
     const batchParams = `batches=${processBatchRequest.numberOfBatches}`;
     const numOfNumbersParams = `numbersToProcess=${processBatchRequest.numberToProcess}`;
-    const endpointUrl = `/Process?${batchParams}&${numOfNumbersParams}`;
+    const endpointUrl = `${this.baseUrl}Dispatch?${batchParams}&${numOfNumbersParams}`;
     return this.http.get<BatchProcessingResponse>(endpointUrl);
   }
 
   getStatus() {
-    return this.http.get<BatchProcessingResponse>('Process/Status');
+    return this.http.get<BatchProcessingResponse>(`${this.baseUrl}Dispatch/Status`);
   }
 }

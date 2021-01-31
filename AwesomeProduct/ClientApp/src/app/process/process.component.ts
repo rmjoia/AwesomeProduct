@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { EMPTY, interval, Observable, Subject } from 'rxjs';
+import { EMPTY, interval, Observable, of, Subject } from 'rxjs';
 import { catchError, take, takeUntil } from 'rxjs/operators';
 import { BatchProcessingRequest } from '../shared/models/BatchProcessingRequest';
 import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
@@ -37,13 +37,13 @@ export class ProcessComponent implements OnDestroy {
       } as BatchProcessingRequest
     ).pipe(
       take(1),
-      catchError(this.handleError)
-    ).subscribe(_ => {
-      this.processing = true;
-    });
+      catchError(this.handleError.bind(this))
+    ).subscribe();
 
     interval(this.secondsInMilliseconds * 2)
-      .pipe(takeUntil(this.subscription))
+      .pipe(
+        takeUntil(this.subscription),
+        catchError(this.handleError.bind(this)))
       .subscribe(_ => {
         this.processService.getStatus().subscribe(response => {
 
@@ -52,8 +52,7 @@ export class ProcessComponent implements OnDestroy {
           console.log(this.response);
 
           if (this.response.isComplete) {
-            this.subscription.next();
-            this.subscription.complete();
+            this.unSubscribe();
             this.processing = false;
           }
         });
@@ -65,14 +64,20 @@ export class ProcessComponent implements OnDestroy {
       this.numberToProcess;
   }
 
-  handleError(error: Observable<any>) {
+  handleError(error: Observable<any>): Observable<any> {
     console.error(error);
-    return EMPTY;
+    this.subscription.next();
+    this.subscription.complete();
+    return of(this.initialState);
+  }
+
+  unSubscribe() {
+    this.subscription.next();
+    this.subscription.complete();
   }
 
   ngOnDestroy(): void {
-    this.subscription.next();
-    this.subscription.complete();
+    this.unSubscribe();
   }
 }
 
