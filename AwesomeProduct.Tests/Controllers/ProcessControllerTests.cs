@@ -1,5 +1,4 @@
 using AwesomeProduct.Controllers;
-using AwesomeProduct.Models;
 using AwesomeProduct.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

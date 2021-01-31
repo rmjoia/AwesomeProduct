@@ -1,7 +1,10 @@
+using AwesomeProduct.Persistence;
+using AwesomeProduct.Persistence.Models;
 using AwesomeProduct.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,8 +26,12 @@ namespace AwesomeProduct
         {
             services.AddSingleton<IBatchProcessor, BatchProcessor>();
             services.AddTransient<IGeneratorManager, GeneratorManager>();
+            services.AddDbContext<AwesomeProductDbContext>(options => options.UseInMemoryDatabase(databaseName: "AwesomeProduct"));
+            services.AddTransient<IRepository<BatchProcess>, BatchProcessesRepository>();
+            services.AddTransient<IBatchProcessService, BatchProcessService>();
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AwesomeAPI", Version = "v1" });

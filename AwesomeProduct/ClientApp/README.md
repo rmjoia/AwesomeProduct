@@ -37,4 +37,8 @@ In a real world scenario I would use a transactionId passed along the multiple A
 For this particular example I made the Processor a singleton to keep state between requests so that I can access the current state of processing at any time.
 The state is reset when a new process request is made.
 
+On the BatchJobsController, I'm adding the exception message to the status code, but I wouldn't do that in production, one should never reveal too much ;).
+
+
+
 

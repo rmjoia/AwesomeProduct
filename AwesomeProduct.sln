@@ -40,4 +40,9 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B71C02B-0297-4BA9-B26C-9D48E6A7C869}
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.StandardHeader = $1
+		description = An Awesome App
+	EndGlobalSection
 EndGlobal

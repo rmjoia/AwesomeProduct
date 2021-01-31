@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace AwesomeProduct.Tests.Services
 {
-    public class BatchProcessorTests
+    public class BatchProcessorServiceTests
     {
         Mock<IGeneratorManager> processorMock;
         [SetUp]

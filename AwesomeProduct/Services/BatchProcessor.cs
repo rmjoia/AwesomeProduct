@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,11 +28,13 @@ namespace AwesomeProduct.Services
         {
             var currentBatchProcess = new List<BatchJob>(_currentBatchProcess.ToArray());
             var groupedBatchJobs = currentBatchProcess.GroupBy(b => b.BatchNumber).Select(g => new BatchJob(g.First().BatchNumber, g.Sum(b => b.Number), g.First().LeftToProcess - g.Count())).ToList();
+            var isComplete = groupedBatchJobs.Any() && groupedBatchJobs.All(b => b.LeftToProcess == 0);
 
             var result = new BatchProcessResponse()
             {
                 Data = groupedBatchJobs,
-                IsComplete = groupedBatchJobs.Any() && groupedBatchJobs.All(b => b.LeftToProcess == 0)
+                IsComplete = isComplete,
+                DateCompleted = isComplete ? new DateTime() : null
             };
 
             return result;
