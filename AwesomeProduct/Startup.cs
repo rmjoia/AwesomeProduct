@@ -14,6 +14,8 @@ namespace AwesomeProduct
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,6 +31,17 @@ namespace AwesomeProduct
             services.AddDbContext<AwesomeProductDbContext>(options => options.UseInMemoryDatabase(databaseName: "AwesomeProduct"));
             services.AddTransient<IRepository<BatchProcess>, BatchProcessesRepository>();
             services.AddTransient<IBatchProcessService, BatchProcessService>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin()
+                                             .AllowAnyHeader()
+                                             .AllowAnyMethod();
+                                  });
+            });
 
             services.AddControllers();
 
@@ -51,6 +64,8 @@ namespace AwesomeProduct
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OtherApi v1"));
+
+                app.UseCors(MyAllowSpecificOrigins);
             }
             else
             {

@@ -2,22 +2,30 @@
 
 <p>Enter the data and click process to process things.</p>
 
-<p *ngIf="processing"><em>Loading...</em></p>
-
-<form #processForm>
-  <p>
-    <label class="label" for="NumberOfBatches">Please enter the number of batches:</label>
-    <input name="NumberOfBatches" type="number" [(ngModel)]="numberOfBatches" />
-  </p>
-  <p>
-    <label class="label" for="NumberToProcess">Please enter how many numbers will be processed per batch:</label>
-    <input name="NumberToProcess" type="number" [(ngModel)]="numberToProcess" />
-  </p>
-  <p>
-    <button name="Process" class="button btn-primary" *ngIf="isValid()" [disabled]="processing"
-      (click)="process()">Process</button>
-  </p>
+<form #form="ngForm" class="processForm">
+  <div class="form-group">
+    <label for="NumberOfBatches">Batches</label>
+    <input type="email" class="form-control" aria-describedby="batchesHelp" name="NumberOfBatches" type="number" min="0"
+      [(ngModel)]="numberOfBatches" #batch="ngModel">
+    <small id="batchesHelp" class="form-text text-muted">Specify the number of batches you want to run...</small>
+  </div>
+  <div class="form-group">
+    <label for="NumberToProcess">Numbers / Batch</label>
+    <input class="form-control" id="exampleInputPassword1" name="NumberToProcess" type="number" min="0"
+      [(ngModel)]="numberToProcess" aria-describedby="numbersHelp" #number="ngModel">
+    <small id="numbersHelp" class="form-text text-muted">Specify how many numbers will be processed per batch...</small>
+  </div>
+  <div class="form-group">
+    <div *ngIf="processing" class="alert alert-primary" role="alert">
+      processing data... please wait.
+    </div>
+    <div *ngIf="saving" class="alert alert-primary" role="success">
+      The batch process is being saved...
+    </div>
+  </div>
+  <button name="Process" class="button btn-primary" *ngIf="isValid()" [disabled]="processing"
+    (click)="process()">Process</button>
 </form>
 
-<app-batch-data-display [batches]="response.data" [numberOfBatches]="numberOfBatches"
+<app-batch-data-display [batches]="response?.data" [numberOfBatches]="numberOfBatches"
   [numberToProcess]="numberToProcess"></app-batch-data-display>

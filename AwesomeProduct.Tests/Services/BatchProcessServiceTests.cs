@@ -1,4 +1,5 @@
-﻿using AwesomeProduct.Persistence;
+﻿using System.Collections.Generic;
+using AwesomeProduct.Persistence;
 using AwesomeProduct.Persistence.Models;
 using AwesomeProduct.Services;
 using Moq;
@@ -8,24 +9,30 @@ namespace AwesomeProduct.Tests.Services
 {
     public class BatchProcessServiceTests
     {
-        Mock<IRepository<BatchProcess>> batchProessRepository;
+        Mock<IRepository<BatchProcess>> batchProcessRepository;
         [SetUp]
         public void Setup()
         {
-            batchProessRepository = new Mock<IRepository<BatchProcess>>();
+            batchProcessRepository = new Mock<IRepository<BatchProcess>>();
         }
 
         [Test]
         public void Should_Call_Repository_When_Getting_Last_Record()
         {
             //  Arrange
-            var batchProcessService = new BatchProcessService(batchProessRepository.Object);
+            var batchProcess = new BatchProcess()
+            {
+                Data = new List<Batch>()
+            };
+
+            batchProcessRepository.Setup(r => r.GetLast()).Returns(batchProcess);
+            var batchProcessService = new BatchProcessService(batchProcessRepository.Object);
 
             //  Act
             var result = batchProcessService.GetLast();
 
             //  Assert
-            batchProessRepository.Verify(r => r.GetLast(), Times.Once);
+            batchProcessRepository.Verify(r => r.GetLast(), Times.Once);
         }
 
         [Test]
@@ -33,13 +40,13 @@ namespace AwesomeProduct.Tests.Services
         {
             //  Arrange
             var item = new BatchProcess();
-            var batchProcessService = new BatchProcessService(batchProessRepository.Object);
+            var batchProcessService = new BatchProcessService(batchProcessRepository.Object);
 
             //  Act
             var result = batchProcessService.Insert(item);
 
             //  Assert
-            batchProessRepository.Verify(r => r.Insert(It.IsAny<BatchProcess>()), Times.Once);
+            batchProcessRepository.Verify(r => r.Insert(It.IsAny<BatchProcess>()), Times.Once);
         }
 
 

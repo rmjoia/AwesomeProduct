@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BatchJobResult } from '../shared/models/BatchJobResult';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { BatchProcessingResponse } from '../shared/models/BatchProcessingResponse';
+import { HistoryService } from '../shared/Services/history-service.service';
 
 @Component({
   selector: 'app-batch-process-history',
@@ -9,25 +11,25 @@ import { BatchProcessingResponse } from '../shared/models/BatchProcessingRespons
 })
 export class BatchProcessHistoryComponent implements OnInit {
 
-  processes: BatchProcessingResponse[] = [];
+  private readonly initialState = {
+    data: [],
+    isComplete: false,
+    DateCompleted: undefined
+  } as BatchProcessingResponse;
+
+  processes$: Observable<BatchProcessingResponse> = of(this.initialState);
   numberOfBatches = 0;
   numberToProcess = 0;
 
-  constructor() { }
+  constructor(private historyService: HistoryService) { }
 
   ngOnInit(): void {
-    //  fetch the latest result
-    this.numberOfBatches = 1;
-    this.numberToProcess = 1;
-    this.processes = [
-      {
-        data: [
-          { batchNumber: 1, number: 500, leftToProcess: 0 } as BatchJobResult
-        ],
-        isComplete: true
-      } as BatchProcessingResponse
-    ];
-
+    this.processes$ = this.historyService.getLastProcess()
+      .pipe(
+        catchError(() => {
+          return of(this.initialState);
+        })
+      );
   }
 
 }

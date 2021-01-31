@@ -1,10 +1,11 @@
-﻿using AwesomeProduct.Persistence.Models;
+﻿using AwesomeProduct.Models;
+using AwesomeProduct.Persistence.Models;
 
 namespace AwesomeProduct.Services
 {
     public interface IBatchProcessService
     {
-        BatchProcess GetLast();
+        BatchProcessResponse GetLast();
         int Insert(BatchProcess item);
     }
 }

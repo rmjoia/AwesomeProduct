@@ -1,4 +1,5 @@
 using AwesomeProduct.Controllers;
+using AwesomeProduct.Models;
 using AwesomeProduct.Persistence.Models;
 using AwesomeProduct.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace AwesomeProduct.Tests
         public void Should_Return_Result_When_Records_Is_Found()
         {
             //  Arrange
-            batchProcessServiceMock.Setup(r => r.GetLast()).Returns(new BatchProcess());
+            batchProcessServiceMock.Setup(r => r.GetLast()).Returns(new BatchProcessResponse());
             var batchJobsController = new BatchJobsController(batchProcessServiceMock.Object);
 
             //  Act
