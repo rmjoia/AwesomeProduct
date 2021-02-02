@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  processUrl: 'https://localhost:19263/',
-  persistenceUrl: 'https://localhost:5001/'
+  processUrl: 'https://localhost:44378/',
+  persistenceUrl: 'https://localhost:44331/'
 };
 
 /*

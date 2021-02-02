@@ -6,7 +6,7 @@ namespace OtherApi.Services
 {
     public class ProcessService : IProcessService
     {
-        const string PROCESSING_API_URL = "https://localhost:5001/";
+        const string PROCESSING_API_URL = "https://localhost:44331/";
         private IHttpClientFactory _clientFactory;
 
         public ProcessService(IHttpClientFactory clientFactory)
